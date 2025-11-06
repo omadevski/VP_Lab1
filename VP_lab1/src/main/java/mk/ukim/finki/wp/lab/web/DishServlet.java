@@ -31,6 +31,9 @@ public class DishServlet extends HttpServlet {
         Chef chef = chefId != null ? chefService.findById(chefId) : null;
         List<Dish> dishes = dishService.listDishes();
 
+        Chef popular = chefService.mostPopularChef();
+        int popularCount = popular.getDishes() == null ? 0 : popular.getDishes().size();
+
         resp.setContentType("text/html;charset=UTF-8");
         PrintWriter out = resp.getWriter();
         out.println("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Add Dish to Chef</title>"
@@ -47,6 +50,16 @@ public class DishServlet extends HttpServlet {
         out.println("<aside><table>");
         out.println("<tr><td><b>Chef ID</b></td><td>" + (chef != null ? chef.getId() : "") + "</td></tr>");
         out.println("<tr><td><b>Chef Name</b></td><td>" + (chef != null ? chef.getFullName() : "") + "</td></tr>");
+
+        out.println("<tr><td colspan='2'><br/></td></tr>");
+        out.println("<tr><td colspan='2'>");
+        out.println("<div style='border:1px solid #ccc;padding:10px;border-radius:4px;'>");
+        out.println("<b>Most popular chef</b><br/>");
+        out.println("Name: " + popular.getFirstName() + " " + popular.getLastName() + "<br/>");
+        out.println("Dishes prepared: " + popularCount);
+        out.println("</div>");
+        out.println("</td></tr>");
+
         out.println("</table></aside></body></html>");
         out.flush();
     }

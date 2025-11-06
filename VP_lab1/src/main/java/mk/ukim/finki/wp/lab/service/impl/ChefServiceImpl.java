@@ -36,4 +36,15 @@ public class ChefServiceImpl implements ChefService {
         }
         return chefRepository.save(chef);
     }
+    @Override
+    public Chef mostPopularChef() {
+        return chefRepository.findAll()
+                .stream()
+                .max((a, b) -> Integer.compare(
+                        a.getDishes() == null ? 0 : a.getDishes().size(),
+                        b.getDishes() == null ? 0 : b.getDishes().size()
+                ))
+                .orElseThrow(() -> new RuntimeException("No chefs available"));
+    }
+
 }
